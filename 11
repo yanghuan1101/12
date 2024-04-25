@@ -1,0 +1,236 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Point
+{
+public:
+	int x, y;
+public:
+	Point()
+	{
+		
+
+	}
+	Point(int xx, int yy)
+	{
+		x = xx;
+		y = yy;
+	}
+	void show()
+	{
+		printf("(%d,%d)", x, y);
+	}
+	bool operator <(Point& b)//定义点的大小为到半径距离 
+	{
+		int ar = (this->x) * (this->x) + (this->y) * (this->y);
+		int br = (b.x) * (b.x) + (b.y) * (b.y);
+		if (ar < br)
+			return true;
+		else
+			return false;
+	}
+};
+
+template <class T>
+class DynamicArray
+{
+public:
+	int length;
+	int size;
+	T* head;
+public:
+
+	DynamicArray()
+	{
+		head = new T[20];
+		size = 0;
+		length = 10;
+	}
+	~DynamicArray()//析构函数释放数组数据
+	{
+		if (head != NULL)
+			delete[]head;
+	}
+	void resize()
+	{
+		if (size >= length)
+		{
+			T* newhead = new T[size + 1];
+			for (int i = 0; i < size; i++)
+			{
+				*(newhead + i) = *(head + i);
+			}
+			head = newhead;
+		}
+	}
+	int AddItem(T aData)//添加数组元素
+	{
+		if (size == 0)
+		{
+			*(head + 0) = aData;
+			size++;
+		}
+		else
+		{
+			resize();
+			*(head + size) = aData;
+			size++;
+		}
+		return size;
+
+	}
+	bool RemoveAt(int index)//删除数据元素
+	{
+		if (index > size - 1)return false;
+		else
+		{
+			for (int i = index; i <= size - 2; i++)
+			{
+				*(head + i) = *(head + i + 1);
+			}
+			size--;
+			return true;
+		}
+	}
+	void InsertItem(int index, T aData)//插入数组元素
+	{
+		resize();
+		for (int i = size - 1; i >= index; i--)
+		{
+			*(head + i + 1) = *(head + i);
+		}
+		*(head + index) = aData;
+		size++;
+	}
+	void SelectSort()//数组元素选择排序
+	{
+		for (int i = 0; i < size; i++)
+		{
+			int min = i;
+			for (int j = i; j < size; j++)
+			{
+				if (*(head + j) < *(head + min))min = j;
+			}
+			T p = *(head + i);
+			*(head + i) = *(head + min);
+			*(head + min) = p;
+		}
+	}
+	void Show()
+	{
+		for (int i = 0; i < 11; i++)
+		{
+			cout << *(this->head + i) << " ";
+		}
+		cout << endl;
+	}
+
+};
+
+
+int main()
+{
+	//Point类测试 
+	int math;
+	cin >> math;
+	if (math == 1)
+	{
+		cout << "Point类测试1" << endl << endl;
+		DynamicArray <Point> a;
+		cout << "输入：" << endl;
+		for (int i = 10; i >= 0; i--)
+		{
+			Point b(i, i + 2);
+			a.AddItem(b);
+			printf("(%d,%d)", i, i + 2);
+		}
+		cout << endl;
+		Point b(5,7);
+		cout << "移除下标3的元素后：" << endl;
+		a.RemoveAt(3);
+		for (int i = 0; i < 11; i++)
+		{
+			(*(a.head + i)).show();
+		}
+		cout << endl;
+		a.InsertItem(3, b);
+		cout << "在下标3处插入元素(5,7)后：" << endl;
+		for (int i = 0; i < 11; i++)
+		{
+			(*(a.head + i)).show();
+		}
+		cout << endl;
+		a.SelectSort();
+		cout << "元素升序排列后：" << endl;
+		for (int i = 0; i < 11; i++)
+		{
+			(*(a.head + i)).show();
+		}
+		cout << endl << endl << endl;
+	}
+	else if (math == 2)
+	{
+		cout << "Point类测试2" << endl << endl;
+		DynamicArray <Point> a;
+		cout << "输入：" << endl;
+		for (int i = 15; i >= 0; i--)
+		{
+			Point b(i, i + 2);
+			a.AddItem(b);
+			printf("(%d,%d)", i, i + 1);
+		}
+		cout << endl;
+		Point b(11, 12);
+		cout << "移除下标4的元素后：" << endl;
+		a.RemoveAt(4);
+		for (int i = 0; i < 16; i++)
+		{
+			(*(a.head + i)).show();
+		}
+		cout << endl;
+		a.InsertItem(4, b);
+		cout << "在下标4处插入元素(11,12)后：" << endl;
+		for (int i = 0; i < 16; i++)
+		{
+			(*(a.head + i)).show();
+		}
+		cout << endl;
+		a.SelectSort();
+		cout << "元素升序排列后：" << endl;
+		for (int i = 0; i < 16; i++)
+		{
+			(*(a.head + i)).show();
+		}
+		cout << endl << endl << endl;
+	}
+
+	else if (math == 3)
+	{
+		// int类测试 
+		cout << "int类测试" << endl << endl;
+		DynamicArray <int> c;
+		cout << "输入：" << endl;
+		for (int i = 20; i >= 0; i = i - 2)
+		{
+			c.AddItem(i);
+			cout << i << " ";
+		}
+		cout << endl;
+		int o;
+		cin >> o;
+		c.RemoveAt(o);
+		cout << "移除下标o的元素后：" << endl;
+		c.Show();
+		c.InsertItem(5,6);
+		cout  << "在下标5处插入元素6后："<< endl;
+		c.Show();
+		c.SelectSort();
+		cout << "元素升序排列后：" << endl;
+		c.Show();
+	}
+	else
+	{
+		return 0;
+	}
+}
